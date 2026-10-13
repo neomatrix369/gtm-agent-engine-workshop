@@ -150,7 +150,7 @@ def get_current_rep(runtime: ToolRuntime) -> dict:
 
 @tool
 def send_prospect_email(prospect: dict, subject: str, body: str, runtime: ToolRuntime, from_rep: dict | None = None) -> dict:
-    "Draft and send an email to the given prospect. Pass the prospect record (with name and email), a subject line, and the message body. The sending rep defaults to the signed-in rep."
+    "Sends plain-text email only; files/attachments are NOT supported."
     if from_rep is None:
         user_id = (runtime.config.get("metadata") or {}).get("user_id")
         from_rep = data_service.get_rep(user_id or "") or {}
@@ -186,6 +186,9 @@ SYSTEM_PROMPT = (
     "offering fit criteria, update prospect info, and send emails to prospects. Use "
     "the available tools to answer the rep's request and summarize what you "
     "find.\n\n"
+    "You cannot attach files. If the rep asks you to send a document (e.g. a pricing deck), "
+    "do not write that it is attached or included in the outbound email body or in your "
+    "response; tell the rep the document must be shared separately.\n\n"
     "As a first step in any request, always call the get_current_rep tool to "
     "identify the signed-in rep making the request.\n\n"
     "When a rep asks you to email a prospect, always carry the request "
